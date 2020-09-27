@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MT_Task_Queuing.Config
 {
-    internal class Configuration : IConfiguration
+    public class Configuration : IConfiguration
     {
         public int QueueMaxSize { get; }
         public int ProducerPollingDelay { get; }

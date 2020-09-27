@@ -3,7 +3,7 @@ using System;
 using System.Linq.Expressions;
 using MT_Task_Queuing.Services;
 
-namespace MT_Task_Queuing.Tests
+namespace MT_Task_Queuing.Services.Tests
 {
     [TestFixture]
     public class ExpressionEvaluatorTest

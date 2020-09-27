@@ -21,7 +21,6 @@ namespace MT_Task_Queuing.Services.ExpressionGenerators
         {
             StringBuilder builder = new StringBuilder();
 
-
             int numOfOperand = _random.Next(1, _maxNumberOfOperations); 
             int randomNumber;
             for (int i = 0; i < numOfOperand; i++)
