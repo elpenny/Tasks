@@ -15,7 +15,8 @@ namespace MT_Task_Queuing
         {
             var queue = new ConcurrentQueue<Task<string>>();
             Random seedGenerator = new Random();
-            var config = new Configuration(
+            var config = new Configuration
+            (
                 queueMaxSize: 100, 
                 producerPollingDelay: 2000, 
                 verboseLogging: true, 
@@ -23,7 +24,8 @@ namespace MT_Task_Queuing
                 consumerCount: 2, 
                 taskOperationsMaxCount: 5, 
                 taskNumbersMaxValue: 100,
-                consumerDelay: 100);
+                consumerDelay: 1000
+            );
             
 
             using (var taskList = new BlockingCollection<Task<string>>(queue, config.QueueMaxSize))
