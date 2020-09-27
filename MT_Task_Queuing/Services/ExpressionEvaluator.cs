@@ -1,6 +1,6 @@
 ﻿using MT_Task_Queuing.Interfaces;
 using System;
-using System.Data;
+using NCalc;
 
 namespace MT_Task_Queuing.Services
 {
@@ -12,7 +12,7 @@ namespace MT_Task_Queuing.Services
 
             try
             {
-                result = Convert.ToDouble(new DataTable().Compute(expression, null));
+                result = new Expression(expression).ToLambda<double>()();
             }
             catch (OverflowException ex)
             {
