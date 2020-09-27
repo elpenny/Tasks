@@ -8,7 +8,17 @@ namespace MT_Task_Queuing.Services
     {
         public string Execute(string expression, bool verboseLogging)
         {
-            double result = Convert.ToDouble(new DataTable().Compute(expression, null));
+            double result;
+
+            try
+            {
+                result = Convert.ToDouble(new DataTable().Compute(expression, null));
+            }
+            catch (OverflowException ex)
+            {
+                return "Expression result was too big or too small to store it.";
+            }
+            
 
             if(verboseLogging)
             {

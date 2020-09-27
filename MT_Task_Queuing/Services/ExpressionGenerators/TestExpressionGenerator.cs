@@ -1,7 +1,7 @@
 ﻿using MT_Task_Queuing.Interfaces;
 using System;
 
-namespace MT_Task_Queuing.Services
+namespace MT_Task_Queuing.Services.ExpressionGenerators
 {
     internal class TestExpressionGenerator : IExpressionGenerator
     {
