@@ -23,7 +23,7 @@ namespace MT_Task_Queuing
                 producerCount: 4, 
                 consumerCount: 2, 
                 taskOperationsMaxCount: 7, 
-                taskNumbersMaxValue: 1000,
+                taskNumbersMaxValue: 5000,
                 consumerDelay: 50
             );
             
