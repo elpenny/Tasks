@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MT_Task_Queuing.Config;
@@ -29,58 +30,48 @@ namespace MT_Task_Queuing
 
             using (var taskList = new BlockingCollection<Task<string>>(queue, config.QueueMaxSize))
             {
-                var producer1 = new TaskProducer(taskList, new ExpressionGenerator(seedGenerator.Next(), config), new ExpressionEvaluator(), "producer 1", config);
-                var producer2 = new TaskProducer(taskList, new ExpressionGenerator(seedGenerator.Next(), config), new ExpressionEvaluator(), "producer 2", config);
-                var producer3 = new TaskProducer(taskList, new ExpressionGenerator(seedGenerator.Next(), config), new ExpressionEvaluator(), "producer 3", config);
-                var producer4 = new TaskProducer(taskList, new ExpressionGenerator(seedGenerator.Next(), config), new ExpressionEvaluator(), "producer 4", config);
+                var producerList = new List<TaskProducer>();
+                for (int i = 0; i < config.ProducerCount; i++)
+                {
+                    producerList.Add(new TaskProducer(taskList, new ExpressionGenerator(seedGenerator.Next(), config), new ExpressionEvaluator(), $"Producer {i+1}", config));
+                }
 
-                var consumer1 = new TaskConsumer(taskList, "consumer1", config);
-                var consumer2 = new TaskConsumer(taskList, "consumer2", config);
+                var consumerList = new List<TaskConsumer>();
+                for (int i = 0; i < config.ConsumerCount; i++)
+                {
+                    consumerList.Add(new TaskConsumer(taskList, $"Consumer {i+1}", config));
+                }
 
                 var token = new CancellationToken();
+                var threadList = new List<Thread>();
 
-
-                Thread p1 = new Thread(() =>
+                foreach(var producer in producerList)
                 {
-                    producer1.DoWork(token);
-                });
-                Thread p2 = new Thread(() =>
-                {
-                    producer2.DoWork(token);
-                });
-                Thread p3 = new Thread(() =>
-                {
-                    producer3.DoWork(token);
-                });
-                Thread p4 = new Thread(() =>
-                {
-                    producer4.DoWork(token);
-                });
+                    threadList.Add(new Thread(() =>
+                        {
+                            producer.DoWork(token);
+                        })
+                    );
+                }
 
-                Thread c1 = new Thread(() =>
+                foreach (var consumer in consumerList)
                 {
-                    consumer1.DoWork(token);
-                });
+                    threadList.Add(new Thread(() =>
+                        {
+                            consumer.DoWork(token);
+                        })
+                    );
+                }
 
-                Thread c2 = new Thread(() =>
+                foreach(var thread in threadList)
                 {
-                    consumer2.DoWork(token);
-                });
+                    thread.Start();
+                }
 
-                p1.Start();
-                p2.Start();
-                p3.Start();
-                p4.Start();
-                c1.Start();
-                c2.Start();
-
-                p1.Join();
-                p2.Join();
-                p3.Join();
-                p4.Join();
-                c1.Join();
-                c2.Join();
-
+                foreach(var thread in threadList)
+                {
+                    thread.Join();
+                }
 
                 Console.WriteLine("Finished");
             }        
