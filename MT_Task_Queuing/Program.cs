@@ -13,8 +13,6 @@ namespace MT_Task_Queuing
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-
             var queue = new ConcurrentQueue<Task<string>>();
             Random seedGenerator = new Random();
             var config = new Configuration(
@@ -30,10 +28,7 @@ namespace MT_Task_Queuing
 
             using (var taskList = new BlockingCollection<Task<string>>(queue, config.QueueMaxSize))
             {
-                List<TaskProducer> producerList;
-                List<TaskConsumer> consumerList;
-
-                CreateProducersANdConsumers(seedGenerator, config, taskList, out producerList, out consumerList);
+                CreateProducersANdConsumers(seedGenerator, config, taskList, out List<TaskProducer> producerList, out List<TaskConsumer> consumerList);
 
                 var token = new CancellationToken();
 
