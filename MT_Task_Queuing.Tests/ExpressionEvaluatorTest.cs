@@ -67,7 +67,38 @@ namespace MT_Task_Queuing.Tests
             Assert.That(result, Is.EqualTo("Expression result was equal to divide by zero operation."));
         }
 
+        [Test]
+        public void TestCorrectOrder()
+        {
+            var result = _evaluator.Execute("2+2*2", false);
 
+            Assert.That(result, Is.EqualTo("6"));
+        }
+
+        [Test]
+        public void TestBrackets()
+        {
+            var result = _evaluator.Execute("(2+2)*2", false);
+
+            Assert.That(result, Is.EqualTo("8"));
+        }
+        
+
+        [Test]
+        public void TestComplicatedExpression()
+        {
+            var result = _evaluator.Execute("2+2*2+2-10*-1+3*6", false);
+
+            Assert.That(result, Is.EqualTo("36"));
+        }
+
+        [Test]
+        public void TestComplicatedExpressionWithBrackets()
+        {
+            var result = _evaluator.Execute("(2+2)*(2+2)-10*(-1+(3*6))", false);
+
+            Assert.That(result, Is.EqualTo("-154"));
+        }
 
         [Test]
         public void TestDoubleOverflow()
