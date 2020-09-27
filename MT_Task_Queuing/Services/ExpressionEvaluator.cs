@@ -2,7 +2,7 @@
 using System;
 using System.Data;
 
-namespace MT_Task_Queuing
+namespace MT_Task_Queuing.Services
 {
     internal class ExpressionEvaluator : IExpressionEvaluator
     {
