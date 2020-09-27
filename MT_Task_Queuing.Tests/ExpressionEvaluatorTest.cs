@@ -16,28 +16,47 @@ namespace MT_Task_Queuing.Tests
             _evaluator = new ExpressionEvaluator();
         }
 
+        [TestCase("0+0")]
+        [TestCase("0-0")]
+        [TestCase("0*0")]
+        public void TestZeroSimpleOperations(string expression)
+        {
+            var result = _evaluator.Execute(expression, false);
+
+            Assert.That(result, Is.EqualTo("0"));
+        }
+
+        [Test]
+        public void TestDivideByZero()
+        {
+            var result = _evaluator.Execute("0/0", false);
+
+            Assert.That(result, Is.EqualTo("Expression result was equal to divide by zero operation."));
+        }
+
         [Test]
         public void TestSimpleAdd()
         {
-            var result = _evaluator.Execute("0+0", false);
+            var result = _evaluator.Execute("1+1", false);
 
-            Assert.That(result, Is.EqualTo("0"));
+            Assert.That(result, Is.EqualTo("2"));
         }
 
         [Test]
         public void TestSimpleSubstract()
         {
-            var result = _evaluator.Execute("0-0", false);
+            var result = _evaluator.Execute("1-1", false);
 
             Assert.That(result, Is.EqualTo("0"));
         }
 
-        [Test]
-        public void TestSimpleMultiply()
+        [TestCase("1*1")]
+        [TestCase("1/1")]
+        public void TestSimpleMultiplyAndDivide(string expression)
         {
-            var result = _evaluator.Execute("0*0", false);
+            var result = _evaluator.Execute(expression, false);
 
-            Assert.That(result, Is.EqualTo("0"));
+            Assert.That(result, Is.EqualTo("1"));
         }
 
         [Test]
@@ -47,6 +66,8 @@ namespace MT_Task_Queuing.Tests
 
             Assert.That(result, Is.EqualTo("Expression result was equal to divide by zero operation."));
         }
+
+
 
         [Test]
         public void TestDoubleOverflow()
