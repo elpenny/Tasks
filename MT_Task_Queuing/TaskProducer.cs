@@ -86,7 +86,7 @@ namespace MT_Task_Queuing
         {
             return new Task<string>(() =>
             {
-                string expression = _generator.Next();
+                string expression = _generator.GenerateExpression();
                 return _evaluator.Execute(expression, _configuration.VerboseLogging);
             });
         }

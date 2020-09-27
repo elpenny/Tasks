@@ -15,13 +15,14 @@ namespace MT_Task_Queuing
 
             var queue = new ConcurrentQueue<Task<string>>();
             var config = new Configuration(20, 2000, true, 4, 2);
+            Random seedGenerator = new Random();
 
             using (var taskList = new BlockingCollection<Task<string>>(queue, config.QueueMaxSize))
             {
-                var producer1 = new TaskProducer(taskList, new ExpressionGenerator(), new ExpressionEvaluator(), "producer 1", config);
-                var producer2 = new TaskProducer(taskList, new ExpressionGenerator(), new ExpressionEvaluator(), "producer 2", config);
-                var producer3 = new TaskProducer(taskList, new ExpressionGenerator(), new ExpressionEvaluator(), "producer 3", config);
-                var producer4 = new TaskProducer(taskList, new ExpressionGenerator(), new ExpressionEvaluator(), "producer 4", config);
+                var producer1 = new TaskProducer(taskList, new TestExpressionGenerator(seedGenerator.Next()), new ExpressionEvaluator(), "producer 1", config);
+                var producer2 = new TaskProducer(taskList, new TestExpressionGenerator(seedGenerator.Next()), new ExpressionEvaluator(), "producer 2", config);
+                var producer3 = new TaskProducer(taskList, new TestExpressionGenerator(seedGenerator.Next()), new ExpressionEvaluator(), "producer 3", config);
+                var producer4 = new TaskProducer(taskList, new TestExpressionGenerator(seedGenerator.Next()), new ExpressionEvaluator(), "producer 4", config);
 
                 var consumer1 = new TaskConsumer(taskList, "consumer1", config);
                 var consumer2 = new TaskConsumer(taskList, "consumer2", config);

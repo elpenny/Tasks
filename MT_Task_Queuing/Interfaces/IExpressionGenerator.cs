@@ -2,6 +2,6 @@
 {
     internal interface IExpressionGenerator
     {
-        string Next();
+        string GenerateExpression();
     }
 }
