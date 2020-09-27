@@ -17,14 +17,14 @@ namespace MT_Task_Queuing
             Random seedGenerator = new Random();
             var config = new Configuration
             (
-                queueMaxSize: 100, 
+                queueMaxSize: 1000, 
                 producerPollingDelay: 2000, 
-                verboseLogging: true, 
+                verboseLogging: false, 
                 producerCount: 4, 
                 consumerCount: 2, 
-                taskOperationsMaxCount: 5, 
-                taskNumbersMaxValue: 100,
-                consumerDelay: 1000
+                taskOperationsMaxCount: 7, 
+                taskNumbersMaxValue: 1000,
+                consumerDelay: 50
             );
             
 
@@ -39,7 +39,12 @@ namespace MT_Task_Queuing
                 foreach (var thread in threadList)
                 {
                     thread.Start();
+                }
+
+                foreach (var thread in threadList)
+                {
                     thread.Join();
+
                 }
 
                 Console.WriteLine("Finished");
