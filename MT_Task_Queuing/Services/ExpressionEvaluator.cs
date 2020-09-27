@@ -1,5 +1,6 @@
 ﻿using MT_Task_Queuing.Interfaces;
 using NCalc;
+using System;
 
 namespace MT_Task_Queuing.Services
 {
@@ -13,13 +14,17 @@ namespace MT_Task_Queuing.Services
             {
                 result = new Expression(expression).ToLambda<double>()();
             }
-            catch (EvaluationException ex)
+            catch(EvaluationException ex)
             {
                 return "Expression result was too big or too small to store it.";
             }
+            catch(DivideByZeroException ex)
+            {
+                return "Expression result was equal to divide by zero operation.";
+            }
             
 
-            if(verboseLogging)
+            if (verboseLogging)
             {
                 return $"Expression was: {expression} which equals to: {result}";
             }

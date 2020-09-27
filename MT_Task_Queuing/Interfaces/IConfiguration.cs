@@ -1,6 +1,6 @@
 ﻿namespace MT_Task_Queuing.Interfaces
 {
-    internal interface IConfiguration
+    public interface IConfiguration
     {
         int QueueMaxSize { get; }
         int ProducerPollingDelay { get; }

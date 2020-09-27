@@ -6,7 +6,7 @@ using MT_Task_Queuing.Services;
 namespace MT_Task_Queuing.Tests
 {
     [TestFixture]
-    public class ExpressionGeneratorTest
+    public class ExpressionEvaluatorTest
     {
         private ExpressionEvaluator _evaluator;
 
@@ -33,7 +33,23 @@ namespace MT_Task_Queuing.Tests
         }
 
         [Test]
-        public void TestIntegerOverflow()
+        public void TestSimpleMultiply()
+        {
+            var result = _evaluator.Execute("0*0", false);
+
+            Assert.That(result, Is.EqualTo("0"));
+        }
+
+        [Test]
+        public void TestSimpleDivide()
+        {
+            var result = _evaluator.Execute("0/0", false);
+
+            Assert.That(result, Is.EqualTo("Expression result was equal to divide by zero operation."));
+        }
+
+        [Test]
+        public void TestDoubleOverflow()
         {
             var result = _evaluator.Execute($"{Double.MaxValue}+1", false);
 
@@ -41,7 +57,7 @@ namespace MT_Task_Queuing.Tests
         }
 
         [Test]
-        public void TestIntegerUnderflow()
+        public void TestDoubleUnderflow()
         {
             var result = _evaluator.Execute($"{Double.MinValue}-1", false);
 

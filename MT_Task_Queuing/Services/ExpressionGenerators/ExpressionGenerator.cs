@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MT_Task_Queuing.Services.ExpressionGenerators
 {
-    internal class ExpressionGenerator : IExpressionGenerator
+    public class ExpressionGenerator : IExpressionGenerator
     {
         private Random _random;
         private int _maxNumberOfOperations;
