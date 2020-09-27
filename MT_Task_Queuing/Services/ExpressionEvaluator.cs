@@ -1,5 +1,4 @@
 ﻿using MT_Task_Queuing.Interfaces;
-using System;
 using NCalc;
 
 namespace MT_Task_Queuing.Services
@@ -14,7 +13,7 @@ namespace MT_Task_Queuing.Services
             {
                 result = new Expression(expression).ToLambda<double>()();
             }
-            catch (OverflowException ex)
+            catch (EvaluationException ex)
             {
                 return "Expression result was too big or too small to store it.";
             }

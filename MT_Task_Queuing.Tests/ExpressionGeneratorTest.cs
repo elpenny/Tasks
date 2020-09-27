@@ -35,7 +35,7 @@ namespace MT_Task_Queuing.Tests
         [Test]
         public void TestIntegerOverflow()
         {
-            var result = _evaluator.Execute($"{Int64.MaxValue}+1", false);
+            var result = _evaluator.Execute($"{Double.MaxValue}+1", false);
 
             Assert.That(result, Is.EqualTo("Expression result was too big or too small to store it."));
         }
@@ -43,7 +43,7 @@ namespace MT_Task_Queuing.Tests
         [Test]
         public void TestIntegerUnderflow()
         {
-            var result = _evaluator.Execute($"{Int64.MinValue}-1", false);
+            var result = _evaluator.Execute($"{Double.MinValue}-1", false);
 
             Assert.That(result, Is.EqualTo("Expression result was too big or too small to store it."));
         }
