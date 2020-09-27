@@ -14,7 +14,7 @@ namespace MT_Task_Queuing.Services.ExpressionGenerators
         {
             _random = new Random(seed);
             _maxNumberOfOperations = configuration.TaskOperationsMaxCount;
-            _maxValue = configuration.TaskNumbersMaxValue;
+            _maxValue = configuration.TaskNumbersMinMaxValue;
         }
 
         public string GenerateExpression()
@@ -26,7 +26,7 @@ namespace MT_Task_Queuing.Services.ExpressionGenerators
             for (int i = 0; i < numOfOperand; i++)
             {
 
-                randomNumber = _random.Next(1, _maxValue);
+                randomNumber = _random.Next(-_maxValue, _maxValue);
                 builder.Append(randomNumber);
 
 
@@ -51,7 +51,7 @@ namespace MT_Task_Queuing.Services.ExpressionGenerators
                 }
                 builder.Append(operand);
             }
-            randomNumber = _random.Next(1, _maxValue);
+            randomNumber = _random.Next(-_maxValue, _maxValue);
             builder.Append(randomNumber);
 
             return builder.ToString();
