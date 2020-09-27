@@ -6,5 +6,7 @@
         int ProducerPollingDelay { get; }
         bool VerboseLogging { get; }
         int ProducerCount { get; }
+        int TaskOperationsMaxCount { get; }
+        int TaskNumbersMaxValue { get; }
     }
 }

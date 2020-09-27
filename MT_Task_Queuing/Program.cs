@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MT_Task_Queuing.Config;
 using MT_Task_Queuing.Services;
+using MT_Task_Queuing.Services.ExpressionGenerators;
 
 namespace MT_Task_Queuing
 {
@@ -19,10 +20,10 @@ namespace MT_Task_Queuing
 
             using (var taskList = new BlockingCollection<Task<string>>(queue, config.QueueMaxSize))
             {
-                var producer1 = new TaskProducer(taskList, new TestExpressionGenerator(seedGenerator.Next()), new ExpressionEvaluator(), "producer 1", config);
-                var producer2 = new TaskProducer(taskList, new TestExpressionGenerator(seedGenerator.Next()), new ExpressionEvaluator(), "producer 2", config);
-                var producer3 = new TaskProducer(taskList, new TestExpressionGenerator(seedGenerator.Next()), new ExpressionEvaluator(), "producer 3", config);
-                var producer4 = new TaskProducer(taskList, new TestExpressionGenerator(seedGenerator.Next()), new ExpressionEvaluator(), "producer 4", config);
+                var producer1 = new TaskProducer(taskList, new ExpressionGenerator(seedGenerator.Next(), config), new ExpressionEvaluator(), "producer 1", config);
+                var producer2 = new TaskProducer(taskList, new ExpressionGenerator(seedGenerator.Next(), config), new ExpressionEvaluator(), "producer 2", config);
+                var producer3 = new TaskProducer(taskList, new ExpressionGenerator(seedGenerator.Next(), config), new ExpressionEvaluator(), "producer 3", config);
+                var producer4 = new TaskProducer(taskList, new ExpressionGenerator(seedGenerator.Next(), config), new ExpressionEvaluator(), "producer 4", config);
 
                 var consumer1 = new TaskConsumer(taskList, "consumer1", config);
                 var consumer2 = new TaskConsumer(taskList, "consumer2", config);
