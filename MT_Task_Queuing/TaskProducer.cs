@@ -87,7 +87,7 @@ namespace MT_Task_Queuing
             return new Task<string>(() =>
             {
                 string expression = _generator.Next();
-                return _evaluator.Anaylyze(expression);
+                return _evaluator.Anaylyze(expression, _configuration.VerboseLogging);
             });
         }
     }
