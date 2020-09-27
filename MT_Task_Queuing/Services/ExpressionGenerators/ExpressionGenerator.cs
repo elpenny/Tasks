@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MT_Task_Queuing.Services.ExpressionGenerators
 {
-    internal class ExpressionGenerator : IExpressionGenerator
+    public class ExpressionGenerator : IExpressionGenerator
     {
         private Random _random;
         private int _maxNumberOfOperations;
@@ -20,7 +20,6 @@ namespace MT_Task_Queuing.Services.ExpressionGenerators
         public string GenerateExpression()
         {
             StringBuilder builder = new StringBuilder();
-
 
             int numOfOperand = _random.Next(1, _maxNumberOfOperations); 
             int randomNumber;

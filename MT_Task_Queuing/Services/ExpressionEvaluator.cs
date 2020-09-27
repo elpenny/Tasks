@@ -1,10 +1,10 @@
 ﻿using MT_Task_Queuing.Interfaces;
+using NCalc;
 using System;
-using System.Data;
 
 namespace MT_Task_Queuing.Services
 {
-    internal class ExpressionEvaluator : IExpressionEvaluator
+    public class ExpressionEvaluator : IExpressionEvaluator
     {
         public string Execute(string expression, bool verboseLogging)
         {
@@ -12,15 +12,19 @@ namespace MT_Task_Queuing.Services
 
             try
             {
-                result = Convert.ToDouble(new DataTable().Compute(expression, null));
+                result = new Expression(expression).ToLambda<double>()();
             }
-            catch (OverflowException ex)
+            catch(EvaluationException ex)
             {
                 return "Expression result was too big or too small to store it.";
             }
+            catch(DivideByZeroException ex)
+            {
+                return "Expression result was equal to divide by zero operation.";
+            }
             
 
-            if(verboseLogging)
+            if (verboseLogging)
             {
                 return $"Expression was: {expression} which equals to: {result}";
             }
