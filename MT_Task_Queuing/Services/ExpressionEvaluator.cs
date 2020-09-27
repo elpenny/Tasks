@@ -4,7 +4,7 @@ using System.Data;
 
 namespace MT_Task_Queuing.Services
 {
-    internal class ExpressionEvaluator : IExpressionEvaluator
+    public class ExpressionEvaluator : IExpressionEvaluator
     {
         public string Execute(string expression, bool verboseLogging)
         {
