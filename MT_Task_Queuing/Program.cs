@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MT_Task_Queuing.Config;
+using MT_Task_Queuing.Interfaces;
 using MT_Task_Queuing.Services;
 using MT_Task_Queuing.Services.ExpressionGenerators;
 
@@ -30,11 +31,11 @@ namespace MT_Task_Queuing
 
             using (var taskList = new BlockingCollection<Task<string>>(queue, config.QueueMaxSize))
             {
-                CreateProducersAndConsumers(seedGenerator, config, taskList, out List<TaskProducer> producerList, out List<TaskConsumer> consumerList);
+                CreateProducersAndConsumers(seedGenerator, config, taskList, out List<IConsumerProducer> producerConsumerList);
 
                 var token = new CancellationToken();
 
-                List<Thread> threadList = PrepareThreads(producerList, consumerList, token);
+                List<Thread> threadList = PrepareThreads(producerConsumerList, token);
 
                 foreach (var thread in threadList)
                 {
@@ -51,38 +52,29 @@ namespace MT_Task_Queuing
             }
         }
 
-        private static void CreateProducersAndConsumers(Random seedGenerator, Configuration config, BlockingCollection<Task<string>> taskList, out List<TaskProducer> producerList, out List<TaskConsumer> consumerList)
+        private static void CreateProducersAndConsumers(Random seedGenerator, Configuration config, BlockingCollection<Task<string>> taskList, out List<IConsumerProducer> producerConsumerList)
         {
-            producerList = new List<TaskProducer>();
+            producerConsumerList = new List<IConsumerProducer>();
             for (int i = 0; i < config.ProducerCount; i++)
             {
-                producerList.Add(new TaskProducer(taskList, new ExpressionGenerator(seedGenerator.Next(), config), new ExpressionEvaluator(), $"Producer {i + 1}", config));
+                producerConsumerList.Add(new TaskProducer(taskList, new ExpressionGenerator(seedGenerator.Next(), config), new ExpressionEvaluator(), $"Producer {i + 1}", config));
             }
 
-            consumerList = new List<TaskConsumer>();
             for (int i = 0; i < config.ConsumerCount; i++)
             {
-                consumerList.Add(new TaskConsumer(taskList, $"Consumer {i + 1}", config));
+                producerConsumerList.Add(new TaskConsumer(taskList, $"Consumer {i + 1}", config));
             }
         }
 
-        private static List<Thread> PrepareThreads(List<TaskProducer> producerList, List<TaskConsumer> consumerList, CancellationToken token)
+        private static List<Thread> PrepareThreads(IList<IConsumerProducer> producerConsumerList, CancellationToken token)
         {
             var threadList = new List<Thread>();
 
-            foreach (var producer in producerList)
+            foreach (var consumerProducer in producerConsumerList)
             {
                 threadList.Add(new Thread(() =>
                 {
-                    producer.DoWork(token);
-                }));
-            }
-
-            foreach (var consumer in consumerList)
-            {
-                threadList.Add(new Thread(() =>
-                {
-                    consumer.DoWork(token);
+                    consumerProducer.DoWork(token);
                 }));
             }
 

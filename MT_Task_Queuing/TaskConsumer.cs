@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MT_Task_Queuing
 {
-    internal class TaskConsumer
+    internal class TaskConsumer : IConsumerProducer
     {
         private BlockingCollection<Task<string>> _taskList;
         private readonly string _name;

@@ -1,5 +1,4 @@
-﻿using MT_Task_Queuing.Config;
-using MT_Task_Queuing.Interfaces;
+﻿using MT_Task_Queuing.Interfaces;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MT_Task_Queuing
 {
-    internal class TaskProducer
+    internal class TaskProducer : IConsumerProducer
     {
         private BlockingCollection<Task<string>> _taskList;
         private readonly IExpressionGenerator _generator;
