@@ -28,7 +28,7 @@ namespace MT_Task_Queuing
 
             using (var taskList = new BlockingCollection<Task<string>>(queue, config.QueueMaxSize))
             {
-                CreateProducersANdConsumers(seedGenerator, config, taskList, out List<TaskProducer> producerList, out List<TaskConsumer> consumerList);
+                CreateProducersAndConsumers(seedGenerator, config, taskList, out List<TaskProducer> producerList, out List<TaskConsumer> consumerList);
 
                 var token = new CancellationToken();
 
@@ -41,6 +41,21 @@ namespace MT_Task_Queuing
                 }
 
                 Console.WriteLine("Finished");
+            }
+        }
+
+        private static void CreateProducersAndConsumers(Random seedGenerator, Configuration config, BlockingCollection<Task<string>> taskList, out List<TaskProducer> producerList, out List<TaskConsumer> consumerList)
+        {
+            producerList = new List<TaskProducer>();
+            for (int i = 0; i < config.ProducerCount; i++)
+            {
+                producerList.Add(new TaskProducer(taskList, new ExpressionGenerator(seedGenerator.Next(), config), new ExpressionEvaluator(), $"Producer {i + 1}", config));
+            }
+
+            consumerList = new List<TaskConsumer>();
+            for (int i = 0; i < config.ConsumerCount; i++)
+            {
+                consumerList.Add(new TaskConsumer(taskList, $"Consumer {i + 1}", config));
             }
         }
 
@@ -65,21 +80,6 @@ namespace MT_Task_Queuing
             }
 
             return threadList;
-        }
-
-        private static void CreateProducersANdConsumers(Random seedGenerator, Configuration config, BlockingCollection<Task<string>> taskList, out List<TaskProducer> producerList, out List<TaskConsumer> consumerList)
-        {
-            producerList = new List<TaskProducer>();
-            for (int i = 0; i < config.ProducerCount; i++)
-            {
-                producerList.Add(new TaskProducer(taskList, new ExpressionGenerator(seedGenerator.Next(), config), new ExpressionEvaluator(), $"Producer {i + 1}", config));
-            }
-
-            consumerList = new List<TaskConsumer>();
-            for (int i = 0; i < config.ConsumerCount; i++)
-            {
-                consumerList.Add(new TaskConsumer(taskList, $"Consumer {i + 1}", config));
-            }
         }
     }
 }
