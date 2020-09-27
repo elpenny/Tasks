@@ -30,51 +30,61 @@ namespace MT_Task_Queuing
 
             using (var taskList = new BlockingCollection<Task<string>>(queue, config.QueueMaxSize))
             {
-                var producerList = new List<TaskProducer>();
-                for (int i = 0; i < config.ProducerCount; i++)
-                {
-                    producerList.Add(new TaskProducer(taskList, new ExpressionGenerator(seedGenerator.Next(), config), new ExpressionEvaluator(), $"Producer {i+1}", config));
-                }
+                List<TaskProducer> producerList;
+                List<TaskConsumer> consumerList;
 
-                var consumerList = new List<TaskConsumer>();
-                for (int i = 0; i < config.ConsumerCount; i++)
-                {
-                    consumerList.Add(new TaskConsumer(taskList, $"Consumer {i+1}", config));
-                }
+                CreateProducersANdConsumers(seedGenerator, config, taskList, out producerList, out consumerList);
 
                 var token = new CancellationToken();
-                var threadList = new List<Thread>();
 
-                foreach(var producer in producerList)
-                {
-                    threadList.Add(new Thread(() =>
-                        {
-                            producer.DoWork(token);
-                        })
-                    );
-                }
+                List<Thread> threadList = PrepareThreads(producerList, consumerList, token);
 
-                foreach (var consumer in consumerList)
-                {
-                    threadList.Add(new Thread(() =>
-                        {
-                            consumer.DoWork(token);
-                        })
-                    );
-                }
-
-                foreach(var thread in threadList)
+                foreach (var thread in threadList)
                 {
                     thread.Start();
-                }
-
-                foreach(var thread in threadList)
-                {
                     thread.Join();
                 }
 
                 Console.WriteLine("Finished");
-            }        
+            }
+        }
+
+        private static List<Thread> PrepareThreads(List<TaskProducer> producerList, List<TaskConsumer> consumerList, CancellationToken token)
+        {
+            var threadList = new List<Thread>();
+
+            foreach (var producer in producerList)
+            {
+                threadList.Add(new Thread(() =>
+                {
+                    producer.DoWork(token);
+                }));
+            }
+
+            foreach (var consumer in consumerList)
+            {
+                threadList.Add(new Thread(() =>
+                {
+                    consumer.DoWork(token);
+                }));
+            }
+
+            return threadList;
+        }
+
+        private static void CreateProducersANdConsumers(Random seedGenerator, Configuration config, BlockingCollection<Task<string>> taskList, out List<TaskProducer> producerList, out List<TaskConsumer> consumerList)
+        {
+            producerList = new List<TaskProducer>();
+            for (int i = 0; i < config.ProducerCount; i++)
+            {
+                producerList.Add(new TaskProducer(taskList, new ExpressionGenerator(seedGenerator.Next(), config), new ExpressionEvaluator(), $"Producer {i + 1}", config));
+            }
+
+            consumerList = new List<TaskConsumer>();
+            for (int i = 0; i < config.ConsumerCount; i++)
+            {
+                consumerList.Add(new TaskConsumer(taskList, $"Consumer {i + 1}", config));
+            }
         }
     }
 }
