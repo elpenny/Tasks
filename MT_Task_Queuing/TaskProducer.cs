@@ -10,15 +10,15 @@ namespace MT_Task_Queuing
     internal class TaskProducer
     {
         private BlockingCollection<Task<string>> _taskList;
-        private TaskGenerator _generator;
-        private ExpressionEvaluator _evaluator;
+        private readonly IExpressionGenerator _generator;
+        private readonly IExpressionEvaluator _evaluator;
         private readonly IConfiguration _configuration;
 
         private int _itemAdded = 0;
-        private int _initialLoadCount;
-        private string _name;
+        private readonly int _initialLoadCount;
+        private readonly string _name;
 
-        public TaskProducer(BlockingCollection<Task<string>> taskList, TaskGenerator generator, ExpressionEvaluator evaluator, string name, IConfiguration configuration)
+        public TaskProducer(BlockingCollection<Task<string>> taskList, IExpressionGenerator generator, IExpressionEvaluator evaluator, string name, IConfiguration configuration)
         {
             _taskList = taskList;
             _generator = generator;
@@ -86,8 +86,8 @@ namespace MT_Task_Queuing
         {
             return new Task<string>(() =>
             {
-                string expression = _generator.Next();
-                return _evaluator.Anaylyze(expression, _configuration.VerboseLogging);
+                string expression = _generator.GenerateExpression();
+                return _evaluator.Execute(expression, _configuration.VerboseLogging);
             });
         }
     }
