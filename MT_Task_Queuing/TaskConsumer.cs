@@ -25,15 +25,12 @@ namespace MT_Task_Queuing
             {
                 foreach(var task in _taskList.GetConsumingEnumerable())
                 {
-                    if(_configuration.VerboseLogging)
-                    {
-                        Thread.Sleep(3000);
-                    }
+                    Thread.Sleep(_configuration.ConsumerDelay);
 
                     task.Start();
                     task.Wait();
 
-                    Console.WriteLine($"Consumer:{_name}, result: {task.Result}");
+                    Console.WriteLine($"Consumer: {_name}, result: {task.Result}");
                 }
             }
         }

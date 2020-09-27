@@ -8,5 +8,6 @@
         int ProducerCount { get; }
         int TaskOperationsMaxCount { get; }
         int TaskNumbersMaxValue { get; }
+        int ConsumerDelay { get; }
     }
 }

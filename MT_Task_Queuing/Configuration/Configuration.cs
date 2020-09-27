@@ -14,8 +14,9 @@ namespace MT_Task_Queuing.Config
         public int ConsumerCount { get; }
         public int TaskOperationsMaxCount { get; }
         public int TaskNumbersMaxValue { get; }
+        public int ConsumerDelay { get; }
 
-        public Configuration(int queueMaxSize = 100, int producerPollingDelay = 2000, bool verboseLogging = false, int producerCount = 4, int consumerCount = 2, int taskOperationsMaxCount = 5, int taskNumbersMaxValue = 50000)
+        public Configuration(int queueMaxSize = 100, int producerPollingDelay = 2000, bool verboseLogging = false, int producerCount = 4, int consumerCount = 2, int taskOperationsMaxCount = 5, int taskNumbersMaxValue = 5000, int consumerDelay = 500)
         {
             QueueMaxSize = queueMaxSize;
             ProducerPollingDelay = producerPollingDelay;
@@ -24,6 +25,7 @@ namespace MT_Task_Queuing.Config
             ConsumerCount = consumerCount >= 2 ? consumerCount : 2;
             TaskOperationsMaxCount = taskOperationsMaxCount;
             TaskNumbersMaxValue = taskNumbersMaxValue;
+            ConsumerDelay = consumerDelay;
         }
     }
 }
