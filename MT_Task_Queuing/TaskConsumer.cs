@@ -9,8 +9,8 @@ namespace MT_Task_Queuing
     internal class TaskConsumer
     {
         private BlockingCollection<Task<string>> _taskList;
-        private string _name;
-        private IConfiguration _configuration;
+        private readonly string _name;
+        private readonly IConfiguration _configuration;
 
         public TaskConsumer(BlockingCollection<Task<string>> taskList, string name, IConfiguration configuration)
         {
