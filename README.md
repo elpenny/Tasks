@@ -27,7 +27,7 @@ Instance is configured in this way:
 
 
 ### Known issues:
-- there is some "wonkiness" in 'BlockingQueue.Count', it might be beneficial to implement similar queued structure
+- there is some "wonkiness" in `BlockingQueue.Count`, it might be beneficial to implement similar queued structure
 from scratch to fulfill requirements better.
 
 ### Requirements
